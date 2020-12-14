@@ -1,0 +1,13 @@
+INDEX VERSION 1.131+D:\DB\seminar\SpringJDBCTransaction\.metadata\.plugins\org.eclipse.jdt.core
+4033179059.index
+313017593.index
+2241061314.index
+1496279065.index
+1600298256.index
+4239719125.index
+2872044937.index
+974346819.index
+3064002347.index
+1551793928.index
+2871727047.index
+2603887478.index
