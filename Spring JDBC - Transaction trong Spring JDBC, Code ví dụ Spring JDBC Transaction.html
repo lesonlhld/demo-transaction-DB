@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+<html lang="vi" prefix="og: http://ogp.me/ns#">
+
+<head>
+	
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name='dmca-site-verification' content='ZEJQVjdYc0gwMGk3SXBkNU9vSHE1dz090' />
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://stackjava.com/xmlrpc.php">
+
+<title>Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v7.6.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction. Transaction là 1 giao dịch (hay còn gọi là 1 giao tác) bao gồm 1 loạt các hành động được phải được thực hiện thành công cùng nhau, nếu 1 hành động thất bại thì tất cả các hành động trong loạt hành động đó sẽ trở về trạng thái ban đầu."/>
+<link rel="canonical" href="https://stackjava.com/spring/spring-jdbc-transaction-example.html" />
+<meta property="og:locale" content="vi_VN" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction" />
+<meta property="og:description" content="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction. Transaction là 1 giao dịch (hay còn gọi là 1 giao tác) bao gồm 1 loạt các hành động được phải được thực hiện thành công cùng nhau, nếu 1 hành động thất bại thì tất cả các hành động trong loạt hành động đó sẽ trở về trạng thái ban đầu." />
+<meta property="og:url" content="https://stackjava.com/spring/spring-jdbc-transaction-example.html" />
+<meta property="og:site_name" content="STACKJAVA" />
+<meta property="article:publisher" content="https://www.facebook.com/stackjava" />
+<meta property="article:tag" content="jdbc" />
+<meta property="article:tag" content="spring" />
+<meta property="article:tag" content="spring jdbc" />
+<meta property="article:section" content="Spring" />
+<meta property="article:published_time" content="2018-01-16T20:00:09+00:00" />
+<meta property="article:modified_time" content="2018-01-19T10:38:44+00:00" />
+<meta property="og:updated_time" content="2018-01-19T10:38:44+00:00" />
+<meta property="og:image" content="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-logo.jpg" />
+<meta property="og:image:secure_url" content="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-logo.jpg" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="300" />
+<meta property="og:image:alt" content="spring jdbc logo" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction. Transaction là 1 giao dịch (hay còn gọi là 1 giao tác) bao gồm 1 loạt các hành động được phải được thực hiện thành công cùng nhau, nếu 1 hành động thất bại thì tất cả các hành động trong loạt hành động đó sẽ trở về trạng thái ban đầu." />
+<meta name="twitter:title" content="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction" />
+<meta name="twitter:image" content="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-logo.jpg" />
+<script type='application/ld+json'>{"@context":"https:\/\/schema.org","@type":"Person","url":"https:\/\/stackjava.com\/","sameAs":["https:\/\/www.facebook.com\/stackjava"],"@id":"#person","name":"Tran Huu Cuong"}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Dòng thông tin STACKJAVA &raquo;" href="https://stackjava.com/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stackjava.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.2"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56794,8205,9794,65039],[55358,56794,8203,9794,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='easy-facebook-likebox-plugin-styles-css'  href='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/css/public.css?ver=4.3.9' type='text/css' media='all' />
+<link rel='stylesheet' id='easy-facebook-likebox-font-awesome-css'  href='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/css/font-awesome.css?ver=4.3.9' type='text/css' media='all' />
+<link rel='stylesheet' id='easy-facebook-likebox-animate-css'  href='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/css/animate.css?ver=4.3.9' type='text/css' media='all' />
+<link rel='stylesheet' id='easy-facebook-likebox-popup-styles-css'  href='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/popup/magnific-popup.css?ver=4.3.9' type='text/css' media='all' />
+<link rel='stylesheet' id='orgseries-default-css-css'  href='https://stackjava.com/wp-content/plugins/organize-series/orgSeries.css?ver=4.9.2' type='text/css' media='all' />
+<link rel='stylesheet' id='same-category-posts-css'  href='https://stackjava.com/wp-content/plugins/same-category-posts/same-category-posts.css?ver=4.9.2' type='text/css' media='all' />
+<link rel='stylesheet' id='wpfront-scroll-top-css'  href='https://stackjava.com/wp-content/plugins/wpfront-scroll-top/css/wpfront-scroll-top.min.css?ver=2.0.1' type='text/css' media='all' />
+<link crossorigin="anonymous" rel='stylesheet' id='zerif_font-css'  href='//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C400italic%7CMontserrat%3A400%2C700%7CHomemade+Apple&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link crossorigin="anonymous" rel='stylesheet' id='zerif_font_all-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300%2C300italic%2C400%2C400italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic&#038;subset=latin&#038;ver=4.9.2' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_bootstrap_style-css'  href='https://stackjava.com/wp-content/themes/zerif-lite/css/bootstrap.css?ver=4.9.2' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_fontawesome-css'  href='https://stackjava.com/wp-content/themes/zerif-lite/css/font-awesome.min.css?ver=v1' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_style-css'  href='https://stackjava.com/wp-content/themes/zerif-lite/style.css?ver=1.8.5.44' type='text/css' media='all' />
+<style id='zerif_style-inline-css' type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+</style>
+<link rel='stylesheet' id='zerif_responsive_style-css'  href='https://stackjava.com/wp-content/themes/zerif-lite/css/responsive.css?ver=1.8.5.44' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='zerif_ie_style-css'  href='https://stackjava.com/wp-content/themes/zerif-lite/css/ie.css?ver=1.8.5.44' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='enlighter-wpcustom-css'  href='https://stackjava.com/wp-content/plugins/enlighter/cache/EnlighterJS.custom.css?ver=edcb31ffd8' type='text/css' media='all' />
+<link crossorigin="anonymous" rel='stylesheet' id='enlighter-webfonts-css'  href='//fonts.googleapis.com/css?family=Anonymous+Pro%3Aregular%2Citalic%2C700%2C700italic%7CCousine%3Aregular%2Citalic%2C700%2C700italic%7CCutive+Mono%3Aregular%7CFira+Mono%3Aregular%2C700%7CInconsolata%3Aregular%2C700%7CNova+Mono%3Aregular%7COverpass+Mono%3Aregular%2C700%7COxygen+Mono%3Aregular%7CPT+Mono%3Aregular%7CRoboto+Mono%3Aregular%2Citalic%2C700%2C700italic%7CShare+Tech+Mono%3Aregular%7CSource+Code+Pro%3Aregular%2C700%7CSpace+Mono%3Aregular%2Citalic%2C700%2C700italic%7CUbuntu+Mono%3Aregular%2Citalic%2C700%2C700italic%7CVT323%3Aregular&#038;ver=3.9.0' type='text/css' media='all' />
+<script type='text/javascript' src='https://stackjava.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/popup/jquery.magnific-popup.min.js?ver=4.3.9'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/js/jquery.cookie.js?ver=4.3.9'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var public_ajax = {"ajax_url":"https:\/\/stackjava.com\/wp-admin\/admin-ajax.php"};
+var public_ajax = {"ajax_url":"https:\/\/stackjava.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/js/public.js?ver=4.3.9'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stackjava.com/wp-content/themes/zerif-lite/js/html5.js?ver=4.9.2'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='https://stackjava.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://stackjava.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://stackjava.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.9.2" />
+<link rel='shortlink' href='https://stackjava.com/?p=2540' />
+<link rel="alternate" type="application/json+oembed" href="https://stackjava.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fstackjava.com%2Fspring%2Fspring-jdbc-transaction-example.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://stackjava.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fstackjava.com%2Fspring%2Fspring-jdbc-transaction-example.html&#038;format=xml" />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #dbdbdb; }
+</style>
+<link rel="amphtml" href="https://stackjava.com/spring/spring-jdbc-transaction-example.html/amp"><link rel="icon" href="https://stackjava.com/wp-content/uploads/2017/11/cropped-icon-new-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://stackjava.com/wp-content/uploads/2017/11/cropped-icon-new-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="https://stackjava.com/wp-content/uploads/2017/11/cropped-icon-new-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://stackjava.com/wp-content/uploads/2017/11/cropped-icon-new-1-270x270.png" />
+
+<!-- BEGIN ExactMetrics v5.3.7 Universal Analytics - https://exactmetrics.com/ -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-83360308-2', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- END ExactMetrics Universal Analytics -->
+		<style type="text/css" id="wp-custom-css">
+			.preloader {
+	display: none;
+}
+
+
+.my-div{
+margin-bottom:10px !important;
+}
+
+.sj-card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.sj-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.sj-container {
+    padding: 2px 16px;
+}
+
+ul{
+	line-height: 150%;
+}
+
+ol {
+	line-height: 150%;
+}		</style>
+	
+</head>
+
+
+	<body class="post-template-default single single-post postid-2540 single-format-standard wp-custom-logo" >
+
+
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home123" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader" style="min-height: 140px;">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="https://stackjava.com/" class="custom-logo-link" rel="home" itemprop="url"><img width="512" height="512" src="https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1.png" class="custom-logo" alt="STACKJAVA" itemprop="logo" srcset="https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1.png 512w, https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1-150x150.png 150w, https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1-300x300.png 300w, https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1-250x250.png 250w, https://stackjava.com/wp-content/uploads/2017/11/cropped-cropped-icon-new-1-174x174.png 174w" sizes="(max-width: 512px) 100vw, 512px" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+			
+		
+		<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul id="menu-header-menu" class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li id="menu-item-3357" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3357"><a href="https://stackjava.com/java-core">Java Core</a></li>
+<li id="menu-item-600" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-600"><a href="https://stackjava.com/category/java8">Java 8</a></li>
+<li id="menu-item-1525" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-1525"><a href="https://stackjava.com/category/spring">Spring</a>
+<ul class="sub-menu">
+	<li id="menu-item-1693" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1693"><a href="https://stackjava.com/category/spring-core">Spring Core</a></li>
+	<li id="menu-item-2458" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-2458"><a href="https://stackjava.com/category/spring-jdbc">Spring JDBC</a></li>
+	<li id="menu-item-1694" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1694"><a href="https://stackjava.com/category/spring-mvc">Spring MVC</a></li>
+	<li id="menu-item-3481" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3481"><a href="https://stackjava.com/category/spring-security">Spring Security</a></li>
+	<li id="menu-item-2973" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2973"><a href="https://stackjava.com/category/spring-boot">Spring Boot</a></li>
+	<li id="menu-item-2727" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2727"><a href="https://stackjava.com/category/thymeleaf">Spring Thymeleaf</a></li>
+	<li id="menu-item-4960" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-4960"><a href="https://stackjava.com/category/spring-data">Spring Data</a></li>
+	<li id="menu-item-2538" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2538"><a href="https://stackjava.com/category/spring-hibernate">Spring Hibernate</a></li>
+	<li id="menu-item-8523" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8523"><a href="https://stackjava.com/category/spring-cloud">Spring Cloud</a></li>
+</ul>
+</li>
+<li id="menu-item-6315" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6315"><a href="https://stackjava.com/tu-hoc-hibernate-framework-qua-code-vi-du">Hibernate</a></li>
+<li id="menu-item-935" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-935"><a href="https://stackjava.com/category/jsf">JSF</a></li>
+<li id="menu-item-2872" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2872"><a href="https://stackjava.com/category/cdi">CDI</a></li>
+<li id="menu-item-1357" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1357"><a href="https://stackjava.com/category/design-pattern">Design Pattern</a></li>
+<li id="menu-item-7178" class="menu-item menu-item-type-taxonomy menu-item-object-post_format menu-item-has-children menu-item-7178"><a href="https://stackjava.com/type/aside">Application</a>
+<ul class="sub-menu">
+	<li id="menu-item-7189" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7189"><a href="https://stackjava.com/category/intellij-idea">Intellij IDEA</a></li>
+	<li id="menu-item-7182" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7182"><a href="https://stackjava.com/category/eclipse">Eclipse</a></li>
+	<li id="menu-item-7699" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7699"><a href="https://stackjava.com/category/gradle">Gradle</a></li>
+	<li id="menu-item-7704" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7704"><a href="https://stackjava.com/category/maven">Maven</a></li>
+	<li id="menu-item-7183" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7183"><a href="https://stackjava.com/category/tomcat">Tomcat</a></li>
+	<li id="menu-item-7185" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7185"><a href="https://stackjava.com/category/docker">Docker</a></li>
+	<li id="menu-item-7702" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7702"><a href="https://stackjava.com/category/sdkman">SDKMan</a></li>
+</ul>
+</li>
+<li id="menu-item-4251" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-4251"><a href="https://stackjava.com/category/websocket">WebSocket</a></li>
+<li id="menu-item-7698" class="menu-item menu-item-type-taxonomy menu-item-object-post_format menu-item-has-children menu-item-7698"><a href="https://stackjava.com/type/aside">Database</a>
+<ul class="sub-menu">
+	<li id="menu-item-7181" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7181"><a href="https://stackjava.com/category/redis">Redis</a></li>
+	<li id="menu-item-7179" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7179"><a href="https://stackjava.com/category/postgresql">PostgreSQL</a></li>
+	<li id="menu-item-7180" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7180"><a href="https://stackjava.com/category/mysql">MySQL</a></li>
+	<li id="menu-item-5708" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5708"><a href="https://stackjava.com/huong-dan-mongodb-code-vi-du-java-mongodb">MongoDB</a></li>
+</ul>
+</li>
+<li id="menu-item-7188" class="menu-item menu-item-type-taxonomy menu-item-object-post_format menu-item-has-children menu-item-7188"><a href="https://stackjava.com/type/aside">Language</a>
+<ul class="sub-menu">
+	<li id="menu-item-5252" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5252"><a href="https://stackjava.com/tu-hoc-nodejs">Node.js</a></li>
+	<li id="menu-item-7451" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7451"><a href="https://codecute.com/category/python">Python</a></li>
+	<li id="menu-item-7294" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7294"><a href="https://stackjava.com/tu-hoc-lap-trinh-c-c-qua-code-vi-du">C/C++</a></li>
+	<li id="menu-item-7452" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7452"><a href="https://codecute.com/category/ios">iOS</a></li>
+	<li id="menu-item-7667" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7667"><a href="https://codecute.com/category/android">Android</a></li>
+</ul>
+</li>
+<li id="menu-item-7812" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7812"><a href="https://stackjava.com/category/socketcluster">SocketCluster</a></li>
+<li id="menu-item-6152" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6152"><a href="https://stackjava.com/elasticsearch">Elastic Search</a></li>
+<li id="menu-item-7184" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7184"><a href="https://stackjava.com/category/apache-kafka">Apache Kafka</a></li>
+<li id="menu-item-7703" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7703"><a href="https://stackjava.com/category/jooq">jOOQ</a></li>
+<li id="menu-item-689" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-689"><a href="https://stackjava.com/category/uncategorized">Khác</a>
+<ul class="sub-menu">
+	<li id="menu-item-501" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-501"><a href="https://stackjava.com/category/algorithm">Thuật toán</a></li>
+	<li id="menu-item-4351" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-4351"><a href="https://stackjava.com/category/junit">JUnit</a></li>
+	<li id="menu-item-687" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-687"><a href="https://stackjava.com/category/install">Cài Đặt</a></li>
+	<li id="menu-item-284" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-284"><a href="https://stackjava.com/category/principle">Principle</a></li>
+	<li id="menu-item-286" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-286"><a href="https://stackjava.com/category/demo">Ứng dụng demo</a></li>
+	<li id="menu-item-1359" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1359"><a href="https://stackjava.com/category/faq">FAQ</a></li>
+	<li id="menu-item-3109" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3109"><a href="https://stackjava.com/about-me">About me</a></li>
+</ul>
+</li>
+</ul>		</nav>
+
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+<div class="clear"></div>
+
+</header> <!-- / END HOME SECTION  -->
+
+
+<div id="content" class="site-content">
+
+	<div class="container">
+				<div class="content-left-wrap col-md-9">
+						<div id="primary" class="content-area">
+				<main itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" id="main" class="site-main">
+				<article id="post-2540" class="post-2540 post type-post status-publish format-standard has-post-thumbnail hentry category-spring category-spring-jdbc tag-jdbc tag-spring tag-spring-jdbc">
+	<p id="breadcrumbs"><span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb"><a href="https://stackjava.com/" rel="v:url" property="v:title">Home</a> » <span rel="v:child" typeof="v:Breadcrumb"><a href="https://stackjava.com/category/spring" rel="v:url" property="v:title">Spring</a> » <span class="breadcrumb_last">Spring JDBC &#8211; Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction</span></span></span></span></p>	<header class="entry-header">
+
+		<h1 class="entry-title">Spring JDBC &#8211; Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction</h1>
+
+		<div class="entry-meta">
+
+			<span class="posted-on">Posted on <a href="https://stackjava.com/spring/spring-jdbc-transaction-example.html" rel="bookmark"><time class="entry-date published" datetime="2018-01-16T20:00:09+00:00">Tháng Một 16, 2018</time><time class="updated" datetime="2018-01-19T10:38:44+00:00">Tháng Một 19, 2018</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="https://stackjava.com/author/cuongth">cuongth</a></span></span>
+		</div><!-- .entry-meta -->
+
+	</header><!-- .entry-header -->
+
+
+	<div class="entry-content">
+
+		<p>Spring JDBC &#8211; Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction</p>
+<h1>1. Transaction là gì?</h1>
+<p>Transaction là 1 giao dịch (hay còn gọi là 1 giao tác) bao gồm 1 loạt các hành động được phải được thực hiện thành công cùng nhau, nếu 1 hành động thất bại thì tất cả các hành động trong loạt hành động đó sẽ trở về trạng thái ban đầu.</p>
+<p>(Xem lại: <a href="https://stackjava.com/network-programming/huong-dan-java-jdbc-transaction-la-gi-code-vi-du-transaction-voi-jdbc.html">Transaction là gì? Ví dụ với JDBC Transaction</a>)</p>
+<h1>2. Code ví dụ Spring JDBC Transaction</h1>
+<p>Ở ví dụ này mình sử dụng:</p>
+<ul>
+<li>MySQL làm cơ sở dữ liệu (Xem lại: <a href="https://stackjava.com/install/mysql-la-gi-cai-dat-mysql-mysql-workbench-tren-window.html">Cài đặt và cấu hình MySQL</a>)</li>
+<li>Eclipse</li>
+<li><a href="https://stackjava.com/install/maven-phan-1-maven-la-gi-cai-dat-maven.html">Maven</a></li>
+</ul>
+<p>Tạo database &#8216;demo-spring-jdbc-transaction&#8217;</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="sql">CREATE SCHEMA `demo-spring-jdbc-transaction` ;
+</pre>
+<p>Tạo table &#8216;user_info&#8217;</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="null">CREATE TABLE `demo-spring-jdbc-transaction`.`user_info` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  `address` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
+</pre>
+<h3><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-1.jpg"><img class="alignnone wp-image-2487 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-1.jpg" alt="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction" width="653" height="380" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-1.jpg 653w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-1-300x175.jpg 300w" sizes="(max-width: 653px) 100vw, 653px" /></a></h3>
+<h2>Code ví dụ:</h2>
+<p><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-2.jpg"><img class="alignnone wp-image-2488 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-2.jpg" alt="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction" width="337" height="319" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-2.jpg 337w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-2-300x284.jpg 300w" sizes="(max-width: 337px) 100vw, 337px" /></a></p>
+<h4>Thư viện sử dụng:</h4>
+<pre class="EnlighterJSRAW" data-enlighter-language="xml" data-enlighter-group="pom.xml" data-enlighter-title="pom.xml">&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;stackjava.com&lt;/groupId&gt;
+  &lt;artifactId&gt;SpringJDBC&lt;/artifactId&gt;
+  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+      &lt;version&gt;5.0.2.RELEASE&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+      &lt;version&gt;5.0.2.RELEASE&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+      &lt;version&gt;5.0.2.RELEASE&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;mysql&lt;/groupId&gt;
+      &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+      &lt;version&gt;5.1.45&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;</pre>
+<p>Thư viện <strong>spring-tx</strong> cung cấp khả năng quản lý transaction bằng annotation. (ví dụ bạn đánh dấu 1 method là <strong>@Transactional</strong> thì tức là method đó đã được đặt trong 1 transaction)</p>
+<h4>File Spring config:</h4>
+<pre class="EnlighterJSRAW" data-enlighter-language="xml" data-enlighter-group="applicationContext.xml" data-enlighter-title="applicationContext.xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd"&gt;
+
+  &lt;bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource"&gt;
+    &lt;property name="driverClassName" value="com.mysql.jdbc.Driver" /&gt;
+    &lt;property name="url" value="jdbc:mysql://localhost:3306/demo-spring-jdbc-transaction" /&gt;
+    &lt;property name="username" value="root" /&gt;
+    &lt;property name="password" value="admin1234" /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"&gt;
+    &lt;property name="dataSource" ref="dataSource"&gt;&lt;/property&gt;
+  &lt;/bean&gt;
+
+  &lt;!-- Enable Annotation based Declarative Transaction Management --&gt;
+  &lt;tx:annotation-driven proxy-target-class="true"
+    transaction-manager="transactionManager" /&gt;
+
+  &lt;!-- Creating TransactionManager Bean, since JDBC we are creating of type 
+    DataSourceTransactionManager --&gt;
+  &lt;bean id="transactionManager"
+    class="org.springframework.jdbc.datasource.DataSourceTransactionManager"&gt;
+    &lt;property name="dataSource" ref="dataSource" /&gt;
+  &lt;/bean&gt;
+
+  &lt;bean id="userDAO"
+    class="stackjava.com.springjdbc.dao.UserDAO"&gt;
+    &lt;property name="jdbcTemplate" ref="jdbcTemplate" /&gt;
+  &lt;/bean&gt;
+
+&lt;/beans&gt;
+</pre>
+<ul>
+<li><strong>tx:annotation-driven </strong>được sử dụng để thông báo với spring context rằng chúng ta sẽ sử dụng annotation để quản lý transaction. Thuộc tính <strong>transaction-manager </strong>được sử dụng để cung cấp bean name của transaction</li>
+<li>Bean <strong>transactionManager</strong> được dùng để tạo bean transaction khi datasource được tạo (các query tới database thông qua datasource sẽ được quản lý bởi <strong>transactionManager</strong>)</li>
+</ul>
+<h4>File entity:</h4>
+<pre class="EnlighterJSRAW" data-enlighter-language="null">package stackjava.com.springjdbc.entities;
+
+public class User {
+  private int id;
+  private String name;
+  private String address;
+
+  public User() {
+  }
+
+  public User(int id, String name, String address) {
+    this.id = id;
+    this.name = name;
+    this.address = address;
+  }
+
+  @Override
+  public String toString() {
+    return "User [id=" + id + ", name=" + name + ", address=" + address + "]";
+  }
+
+  // getter - setter
+
+}
+</pre>
+<h4>File DAO:</h4>
+<pre class="EnlighterJSRAW" data-enlighter-group="UserDAO.java" data-enlighter-title="UserDAO.java">package stackjava.com.springjdbc.dao;
+
+import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import stackjava.com.springjdbc.entities.User;
+
+public class UserDAO {
+  
+  private JdbcTemplate jdbcTemplate;
+
+  @Transactional
+  public void insert(List&lt;User&gt; listUser) {
+    String sql = "INSERT INTO user_info (id, name, address) VALUES (?, ?, ?);";
+    for (User user: listUser) {
+      jdbcTemplate.update(sql, user.getId(), user.getName(), user.getAddress());
+      System.out.println("Inserted user: " + user.getId() +" - " +user.getName());
+    }
+  }
+
+  public void insertWithoutTransaction(List&lt;User&gt; listUser) {
+    String sql = "INSERT INTO user_info (id, name, address) VALUES (?, ?, ?);";
+    for (User user: listUser) {
+      jdbcTemplate.update(sql, user.getId(), user.getName(), user.getAddress());
+      System.out.println("Inserted user: " + user.getId() +" - " +user.getName());
+    }
+  }
+
+  public JdbcTemplate getJdbcTemplate() {
+    return jdbcTemplate;
+  }
+
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+  
+}
+</pre>
+<ul>
+<li>Biến jdbcTemplate truy vấn dữ liệu thông qua datasource nên có thể hiểu jdbcTemplate được quản lý bởi transactionManager</li>
+<li>Method <strong>insert</strong> được đánh dấu <strong>@Transactional</strong> (enable quản lý transaction) tức là method này sẽ nằm trong 1 transaction, khi method này xảy ra 1 lỗi thì tất cả những truy vấn trong method này đều bị rollback.</li>
+<li>Method <strong>insertWithoutTransaction</strong> không được đánh dấu <strong>@Transaction</strong> nên nếu có lỗi xảy ra thì những hành động truy vấn trước đó sẽ không bị rollback lại</li>
+</ul>
+<h4>Demo:</h4>
+<pre class="EnlighterJSRAW" data-enlighter-group="Demo.java" data-enlighter-title="Demo.java">package stackjava.com.springjdbc.mainapp;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import stackjava.com.springjdbc.dao.UserDAO;
+import stackjava.com.springjdbc.entities.User;
+
+public class Demo {
+  public static void main(String[] args) throws SQLException {
+    ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    UserDAO userDAO = (UserDAO) ctx.getBean("userDAO");
+    List&lt;User&gt; listUser = new ArrayList&lt;User&gt; ();
+    listUser.add(new User(1, "Nicolas Cage", "USA"));
+    listUser.add(new User(2, "Abramovic", "Russia"));
+    listUser.add(new User(1, "Thor", "Asgard"));
+    userDAO.insert(listUser);
+//		userDAO.insertWithoutTransaction(listUser);
+    
+    ((ClassPathXmlApplicationContext) ctx).close();
+    System.out.println("Done!");
+  }
+}
+</pre>
+<p>Kết quả:</p>
+<p><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg"><img class="alignnone wp-image-2493 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg" alt="Spring JDBC - Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction" width="1186" height="669" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg 1186w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-300x169.jpg 300w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-768x433.jpg 768w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-1024x578.jpg 1024w" sizes="(max-width: 1186px) 100vw, 1186px" /></a></p>
+<p>User thứ nhất và thứ hai insert bình thường nhưng user thứ ba insert thất bại ví nó có id trùng với user thứ nhất.</p>
+<p>Do method <strong>insert</strong> của <strong>UserDAO</strong> được đánh dấu<strong> @Transactional</strong> nên cả 2 user đầu tiên sẽ bị rollback lại không được save vào database.</p>
+<p><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-4.jpg"><img class="alignnone wp-image-2494 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-4.jpg" alt="Spring JDBC - Code ví dụ xử lý Transaction với Spring JDBC" width="769" height="389" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-4.jpg 769w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-4-300x152.jpg 300w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-4-768x388.jpg 768w" sizes="(max-width: 769px) 100vw, 769px" /></a></p>
+<p>Bây giờ bạn dùng method <strong>insertWithoutTransaction</strong> thay vì method <strong>insert.</strong></p>
+<p>Kết quả:</p>
+<p><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg"><img class="alignnone wp-image-2493 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg" alt="Spring JDBC - Code ví dụ xử lý Transaction với Spring JDBC" width="1186" height="669" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3.jpg 1186w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-300x169.jpg 300w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-768x433.jpg 768w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-3-1024x578.jpg 1024w" sizes="(max-width: 1186px) 100vw, 1186px" /></a></p>
+<p>Cũng xảy ra lỗi khi insert user thứ ba nhưng 2 user đầu không bị rollback lại:</p>
+<p><a href="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-5.jpg"><img class="alignnone wp-image-2495 size-full" src="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-5.jpg" alt="Spring JDBC - Code ví dụ xử lý Transaction với Spring JDBC" width="769" height="389" srcset="https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-5.jpg 769w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-5-300x152.jpg 300w, https://stackjava.com/wp-content/uploads/2018/01/spring-jdbc-transaction-5-768x388.jpg 768w" sizes="(max-width: 769px) 100vw, 769px" /></a></p>
+<p>&nbsp;</p>
+<p>Okay, Done!</p>
+<p>Download code ví dụ trên <a href="https://stackjava.com/wp-content/uploads/2018/01/SpringJDBCTransaction.zip">tại đây</a></p>
+<h6><span style="color: #ffffff;">Spring JDBC &#8211; Transaction trong Spring JDBC, Code ví dụ Spring JDBC Transaction</span></h6>
+<h1></h1>
+<p>References:</p>
+<p><a href="https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/transaction.html" target="_blank" rel="noopener">https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/transaction.html</a></p>
+<p><a href="https://spring.io/guides/gs/managing-transactions/" target="_blank" rel="noopener">https://spring.io/guides/gs/managing-transactions/</a></p>
+
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+
+		This entry was posted in <a href="https://stackjava.com/category/spring" rel="category tag">Spring</a>, <a href="https://stackjava.com/category/spring-jdbc" rel="category tag">Spring JDBC</a> and tagged <a href="https://stackjava.com/tag/jdbc" rel="tag">jdbc</a>, <a href="https://stackjava.com/tag/spring" rel="tag">spring</a>, <a href="https://stackjava.com/tag/spring-jdbc" rel="tag">spring jdbc</a>. Bookmark the <a href="https://stackjava.com/spring/spring-jdbc-transaction-example.html" rel="bookmark">permalink</a>.
+		
+	</footer><!-- .entry-footer -->
+
+</article><!-- #post-## -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Điều hướng bài viết</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://stackjava.com/spring/spring-jdbc-preparedstatement-resultsetextractor-rowmapper-namedparameterjdbctemplate-simplejdbctemplate.html" rel="prev"><span class="meta-nav">&larr;</span> Spring JDBC &#8211; Ví dụ PreparedStatement, ResultSetExtractor, RowMapper, NamedParameterJdbcTemplate trong Spring JDBC</a></div><div class="nav-next"><a href="https://stackjava.com/spring/spring-jdbc-batch-processing.html" rel="next">Spring JDBC &#8211; Xử lý batch processing trong Spring JDBC, Code ví dụ. <span class="meta-nav">&rarr;</span></a></div></div>
+	</nav>				</main><!-- #main -->
+															
+			</div><!-- #primary -->
+					</div><!-- .content-left-wrap -->
+						<div class="sidebar-wrap col-md-3 content-left-wrap">
+			
+
+	<div id="secondary" class="widget-area" role="complementary">
+
+		
+		<aside id="easy_facebook_page_plugin-6" class="widget widget_easy_facebook_page_plugin"><div id="fb-root"></div>
+					<script>(function(d, s, id) {
+					  var js, fjs = d.getElementsByTagName(s)[0];
+					  if (d.getElementById(id)) return;
+					  js = d.createElement(s); js.id = id;
+					  js.async=true; 
+					  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=395202813876688";
+					  fjs.parentNode.insertBefore(js, fjs);
+					}(document, 'script', 'facebook-jssdk'));</script> <div class="efbl-like-box 1">
+							<img class="efbl-loader" src="https://stackjava.com/wp-content/plugins/easy-facebook-likebox/public/assets/images/loader.gif" >
+							<div class="fb-page" data-animclass="fadeIn " data-href="https://www.facebook.com/stackjava" data-hide-cover=false data-width="250" data-height="" data-show-facepile=true  data-show-posts=false data-adapt-container-width=false data-hide-cta=false data-small-header="false">
+							</div> 
+							
+						</div>
+					</aside><aside id="search-14" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://stackjava.com/">
+				<label>
+					<span class="screen-reader-text">Tìm kiếm cho:</span>
+					<input type="search" class="search-field" placeholder="Tìm kiếm &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Tìm kiếm" />
+			</form></aside><aside id="custom_html-62" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2150386964990974"
+     data-ad-slot="5260381066"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></aside><aside id="categories-10" class="widget widget_categories"><h2 class="widget-title">Chuyên mục</h2>		<ul>
+	<li class="cat-item cat-item-35"><a href="https://stackjava.com/category/algorithm" title="Algorithm, thuật toán, code ví dụ thuật toán bằng Java">Algorithm</a>
+</li>
+	<li class="cat-item cat-item-109"><a href="https://stackjava.com/category/apache" >Apache</a>
+</li>
+	<li class="cat-item cat-item-83"><a href="https://stackjava.com/category/apache-jmeter" >Apache JMeter</a>
+</li>
+	<li class="cat-item cat-item-161"><a href="https://stackjava.com/category/apache-kafka" >Apache Kafka</a>
+</li>
+	<li class="cat-item cat-item-73"><a href="https://stackjava.com/category/aws" title="Lập trình với AWS / Amazon Web Service bằng Java.
+AWS / Amazon Web Service là gì?
+Các tính năng của Amazon Web Service
+Lập trình với AWS / Amazon Web Service bằng Java.
+aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service aws amazon web service 
+
+">AWS</a>
+</li>
+	<li class="cat-item cat-item-194"><a href="https://stackjava.com/category/c" >C/C++</a>
+</li>
+	<li class="cat-item cat-item-125"><a href="https://stackjava.com/category/cdi" title="CDI
+
+ 	CDI là gì? Khái niệm bean trong CDI là gì?
+ 	Code ví dụ CDI trong Java, @Named, @Inject, @Default, @Alternative
+ 	Sử dụng @Alternative để chọn một thay thế, Annotation @Produces
+ 	Inject nhiều kiểu vào cùng một bean, annotation @Qualifier
+ 	Annotation @PostConstruct, @PreDestroy, @Any trong Java CDI
+ 	Interceptor trong CDI Java, annotation @Interceptor
+">CDI</a>
+</li>
+	<li class="cat-item cat-item-79"><a href="https://stackjava.com/category/clean-code" >Clean Code</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://stackjava.com/category/demo" >Demo</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="https://stackjava.com/category/design-pattern" >Design Pattern</a>
+</li>
+	<li class="cat-item cat-item-172"><a href="https://stackjava.com/category/docker" >Docker</a>
+</li>
+	<li class="cat-item cat-item-133"><a href="https://stackjava.com/category/eclipse" >Eclipse</a>
+</li>
+	<li class="cat-item cat-item-181"><a href="https://stackjava.com/category/elasticsearch" >Elasticsearch</a>
+</li>
+	<li class="cat-item cat-item-105"><a href="https://stackjava.com/category/excel" >Excel</a>
+</li>
+	<li class="cat-item cat-item-37"><a href="https://stackjava.com/category/faq" >FAQ</a>
+</li>
+	<li class="cat-item cat-item-16"><a href="https://stackjava.com/category/framework" >Framework</a>
+</li>
+	<li class="cat-item cat-item-198"><a href="https://stackjava.com/category/freemaker" >Freemaker</a>
+</li>
+	<li class="cat-item cat-item-200"><a href="https://stackjava.com/category/freemarker" >FreeMarker</a>
+</li>
+	<li class="cat-item cat-item-196"><a href="https://stackjava.com/category/gradle" >Gradle</a>
+</li>
+	<li class="cat-item cat-item-15"><a href="https://stackjava.com/category/hibernate" >Hibernate</a>
+</li>
+	<li class="cat-item cat-item-154"><a href="https://stackjava.com/category/httpclient" >HttpClient</a>
+</li>
+	<li class="cat-item cat-item-155"><a href="https://stackjava.com/category/httpcomponents" >HttpComponents</a>
+</li>
+	<li class="cat-item cat-item-50"><a href="https://stackjava.com/category/install" >Install</a>
+</li>
+	<li class="cat-item cat-item-171"><a href="https://stackjava.com/category/intellij-idea" >Intellij IDEA</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="https://stackjava.com/category/java" >Java</a>
+</li>
+	<li class="cat-item cat-item-47"><a href="https://stackjava.com/category/java-basic" >Java Basic</a>
+</li>
+	<li class="cat-item cat-item-130"><a href="https://stackjava.com/category/java-core" >Java Core</a>
+</li>
+	<li class="cat-item cat-item-27"><a href="https://stackjava.com/category/java8" >Java8</a>
+</li>
+	<li class="cat-item cat-item-151"><a href="https://stackjava.com/category/javascript" >JavaScript</a>
+</li>
+	<li class="cat-item cat-item-210"><a href="https://stackjava.com/category/jenkins" >jenkins</a>
+</li>
+	<li class="cat-item cat-item-201"><a href="https://stackjava.com/category/jooq" >jooq</a>
+</li>
+	<li class="cat-item cat-item-67"><a href="https://stackjava.com/category/jsf" title="Tự học JSF qua ví dụ
+
+ 	JSF là gì? Giới thiệu JSF Framework
+ 	Các pha / giai đoạn trong vòng đời của JSF
+ 	Managed Beans, Bean trong JSF, Các scope trong JSF
+ 	Code ví dụ JSF Hello. Ví dụ với JSF Framewrok
+ 	Chuyển trang / điều hướng trong JSF – Forward với Redirect
+ 	Các thẻ trong JSF, Ví dụ submit form với JSF
+ 	Các thẻ (tag) Facalets trong JSF Framework
+ 	Template trong JSF, các thẻ ui:insert ui:define ui:include ui:composition
+ 	Thẻ param, ui:param trong facelets
+ 	Tạo thẻ tùy chỉnh, định nghĩa thẻ mới trong JSF
+ 	Thẻ Convertor, convert trong JSF
+ 	Thẻ Validator, validate trong JSF Framework
+ 	Xử lý Ajax trong JSF Framework
+ 	Đa ngôn ngữ (Internationalization) trong JSF Framework
+ 	Code ví dụ PhaseListener, Sự kiện chuyển pha trong JSF
+ 	PrimeFaces là gì? ví dụ với PrimeFaces và JSF
+ 	Code ví dụ Spring MVC JSF (Spring với JSF, CDI)
+">JSF</a>
+</li>
+	<li class="cat-item cat-item-63"><a href="https://stackjava.com/category/jsp-servlet" >JSP-Servlet</a>
+</li>
+	<li class="cat-item cat-item-141"><a href="https://stackjava.com/category/junit" title="Hướng dẫn tự học JUnit, Code ví dụ JUnit
+Hướng dẫn JUnit
+JUnit là một framework dùng để unit test cho ngôn ngữ lập trình Java. (Một unit ở đây có thể là một hàm, phép tính, một module, một class – thường thì người ta sẽ sử dụng method để làm unit test)
+
+Ở đây mình sẽ giới thiệu JUnit 4 còn JUnit 5 mình sẽ giới thiệu ở mục khác (JUnit 5 khác hoàn toàn so với các bản trước đó)
+
+ 	Cài đặt JUnit + Ví dụ trên eclipse
+ 	Code ví dụ JUnit Assertions (assertEqual, assertTrue...)
+ 	Test runner và Test suite. Tạo bộ test với JUnit (@RunWith, @SuiteClasses)
+ 	Thứ tự chạy các test case trong JUnit
+ 	JUnit expected exception - test exception với JUnit
+ 	JUnit với Matchers và assertThat
+ 	Ví dụ JUnit Ignoring tests và Timeout với test case
+
+Hướng dẫn Mockito
+Trong nhiều trường hợp, method cần test của bạn lại gọi đến nhiều method khác. Để đảm bảo unit test tức là bạn phải giả sử các method gọi đến đang đúng.
+
+Mockito giúp ta làm giả kết quả của các method liên quan để tập trung phục vụ test method hiện tại.
+
+Đang viết...
+Hướng dẫn Unit test với Spring Controller, Java Web
+Đang viết...">JUnit</a>
+</li>
+	<li class="cat-item cat-item-58"><a href="https://stackjava.com/category/library" >Library</a>
+</li>
+	<li class="cat-item cat-item-174"><a href="https://stackjava.com/category/linux" >Linux</a>
+</li>
+	<li class="cat-item cat-item-168"><a href="https://stackjava.com/category/maven" >Maven</a>
+</li>
+	<li class="cat-item cat-item-209"><a href="https://stackjava.com/category/minio" >MinIO</a>
+</li>
+	<li class="cat-item cat-item-178"><a href="https://stackjava.com/category/mongodb" title="Hướng dẫn tự học mongodb qua ví dụ dòng lệnh và giao diện
+
+
+ 	MongoDB là gì? Các khái niệm trong MongoDB
+ 	Hướng dẫn cài đặt, cấu hình MongoDB trên Windows 10
+ 	Cài đặt và sử dụng Robo 3T (RoboMongo) trên Windows
+ 	Hướng dẫn cài đặt MongoDB trên Linux (Ubuntu 16.04)
+ 	Hướng dẫn MongoDB – Tạo database trong MongoDB
+ 	Hướng dẫn MongoDB – Xóa, DROP database trong MongoDB
+ 	Tạo bảng, collections trong MongoDB (Tạo bằng dòng lệnh, Robo3t)
+ 	Xóa bảng, collections trong MongoDB (Xóa bằng lệnh/ Robo3T)
+ 	Insert document, bản ghi trong MongoDB (Insert bằng lệnh, Robo3T)
+ 	Truy vấn dữ liệu/document, find(), Select, Where trong MongoDB
+ 	Xóa document, row trong MongoDB (bằng dòng lệnh, Robo3T)
+ 	Update document, dữ liệu trong MongoDB
+ 	Projection trong MongoDB (SELECT field/column trong MongoDB)
+ 	Sắp xếp trong MongoDB(orderBy, sorting() trong MongoDB)
+ 	Ưu nhược điểm của MongoDB, khi nào nên dùng MongoDB
+ 	Xóa cột, field, trường của collections trong MongoDB ($unset)
+ 	Kiểm tra null, check tồn tại trong MongoDB với $exists
+ 	Đổi tên field trong MongoDB với $rename
+ 	Tạo user/roles, phân quyền người dùng trên MongoDB
+ 	Các loại roles, vai trò, quyền trong MongoDB.
+ 	Đăng nhập mongodb với username và password (database mongo)
+">MongoDB</a>
+</li>
+	<li class="cat-item cat-item-169"><a href="https://stackjava.com/category/mysql" >MySQL</a>
+</li>
+	<li class="cat-item cat-item-36"><a href="https://stackjava.com/category/network-programming" >Network Programming</a>
+</li>
+	<li class="cat-item cat-item-206"><a href="https://stackjava.com/category/nginx" >NGINX</a>
+</li>
+	<li class="cat-item cat-item-164"><a href="https://stackjava.com/category/nodejs" >Node.js</a>
+</li>
+	<li class="cat-item cat-item-204"><a href="https://stackjava.com/category/notepad" >notepad++</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="https://stackjava.com/category/oop" >OOP</a>
+</li>
+	<li class="cat-item cat-item-186"><a href="https://stackjava.com/category/postgresql" >PostgreSQL</a>
+</li>
+	<li class="cat-item cat-item-81"><a href="https://stackjava.com/category/primefaces" >PrimeFaces</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="https://stackjava.com/category/principle" >Principle</a>
+</li>
+	<li class="cat-item cat-item-187"><a href="https://stackjava.com/category/python" >Python</a>
+</li>
+	<li class="cat-item cat-item-189"><a href="https://stackjava.com/category/quartz" >quartz</a>
+</li>
+	<li class="cat-item cat-item-205"><a href="https://stackjava.com/category/reactjs" >ReactJS</a>
+</li>
+	<li class="cat-item cat-item-191"><a href="https://stackjava.com/category/redis" >Redis</a>
+</li>
+	<li class="cat-item cat-item-197"><a href="https://stackjava.com/category/sdkman" >SDKMan</a>
+</li>
+	<li class="cat-item cat-item-137"><a href="https://stackjava.com/category/security" >Security</a>
+</li>
+	<li class="cat-item cat-item-203"><a href="https://stackjava.com/category/socketcluster" >SocketCluster</a>
+</li>
+	<li class="cat-item cat-item-89"><a href="https://stackjava.com/category/spring" >Spring</a>
+</li>
+	<li class="cat-item cat-item-126"><a href="https://stackjava.com/category/spring-boot" >Spring Boot</a>
+</li>
+	<li class="cat-item cat-item-211"><a href="https://stackjava.com/category/spring-cloud" >Spring Cloud</a>
+</li>
+	<li class="cat-item cat-item-98"><a href="https://stackjava.com/category/spring-core" >Spring Core</a>
+</li>
+	<li class="cat-item cat-item-166"><a href="https://stackjava.com/category/spring-data" >Spring Data</a>
+</li>
+	<li class="cat-item cat-item-119"><a href="https://stackjava.com/category/spring-hibernate" >Spring Hibernate</a>
+</li>
+	<li class="cat-item cat-item-114"><a href="https://stackjava.com/category/spring-jdbc" >Spring JDBC</a>
+</li>
+	<li class="cat-item cat-item-100"><a href="https://stackjava.com/category/spring-mvc" title="Giới thiệu Spring MVC - Code ví dụ tự học SpringMVC
+Giới thiệu Spring MVC - Code ví dụ tự học SpringMVC
+
+
+ 	Giới thiệu Spring MVC, Flow trong Spring MVC
+ 	Ví dụ chương trình Spring MVC sử dụng XML config
+ 	Ví dụ chương trình Spring MVC sử dụng Annotation config
+ 	Giới thiệu annotation @RequestMapping
+ 	Giới thiệu annotation @PathVariable, @RequestParam
+ 	Giới thiệu annotation @ResponseBody, @RestController
+ 	Xử lý form trong Spring MVC - Spring MVC Form
+ 	Redirect - Chuyển tiếp trang (1)
+ 	Redirect - Chuyển tiếp trang với RedirectView/RedirectAttribute(2)
+ 	Đa ngôn ngữ trong Spring MVC Internationliaztion-i18n
+ 	Form Validation - Validate dữ liệu khi submit form
+ 	Phân biệt thẻ component-scan, annotation-config, annotation-driven 
+ 	Exception Handling - Xử lý exception trong Spring MVC
+ 	Spring MVC Log4j – Ghi log với Spring AOP, AspectJ, Log4j
+ 	Static Resource – Khai báo css, js – Bootstrap trong Spring MVC
+ 	Spring MVC Upload File
+ 	Spring MVC Upload File kết hợp Progress Bar
+ 	Spring MVC Download File - Tạo API download file
+ 	Spring MVC Tiles - Tạo template trong Spring MVC với Apache Tiles
+ 	Spring MVC Generate XML - Trả về dữ liệu XML
+ 	Spring MVC Generate JSON- Trả về dữ liệu JSON
+ 	Spring MVC Generate RSS - Trả về dữ liệu RSS Feed
+ 	Spring MVC RESTful web service - Tạo API RESTful web service
+ 	Hiển thị Collection (List, Map, Set) với Spring MVC
+ 	Ví dụ Spring MVC + Spring JDBC + MySQL
+ 	Ví dụ Spring MVC + Hibernate + MySQL
+ 	Code ví dụ Spring Security Remember Me (Tự động login)
+ 	Code ví dụ Spring Security Prevent Brute Force
+ 	Code ví dụ Spring Security Concurrent Session Control/ Max Session (Chỉ login tại một nơi)
+ 	Code ví dụ Spring MVC – Spring Security JSON Web Token
+ 	Spring MVC – Security dùng nhiều trang login (multiple form login)
+ 	Code ví dụ Spring MVC Security, login bằng Facebook
+ 	Code ví dụ Spring MVC đăng nhập bằng google/gmail
+ 	Code ví dụ Spring MVC Security đăng nhập bằng LinkedIn
+ 	Code ví dụ Spring MVC FreeMaker
+
+">Spring MVC</a>
+</li>
+	<li class="cat-item cat-item-139"><a href="https://stackjava.com/category/spring-security" title="Hướng dẫn Spring Security 5, Code ví dụ Spring Security
+Spring Security là gì?
+Spring Security là một framework tập trung vào việc cung cấp khả năng xác thực và phân quyền cho ứng dụng Java.
+Cơ chế hoạt động của Spring Security.
+Ở phần này mình sẽ nói về cơ chế làm việc của spring mvc security.
+
+Spring security sẽ tự động tạo form đăng nhập nếu ta không định nghĩa cho nó, sau khi đăng nhập một đối tượng user sẽ được lưu trong session, đối tượng user này sẽ gồm các thông tin như username, password, các quyền...
+
+Ví dụ mình chạy spring security với tomcat:
+
+
+
+Kết hợp đối tượng user trong session và các thông tin config khác như filter các đường dẫn... nó sẽ tự động phân quyền và xác thực khi user truy cập vào từng URL.
+Lợi ích của Spring Security
+Lợi ích lớn nhất của Spring Security là giúp bạn tích hợp tính năng xác thực và phân quyền một cách dễ dàng vào ứng dụng của mình.
+
+Ngoài ra Spring Security còn giúp:
+
+ 	Chống lại CSRF attack
+ 	Bảo vệ Session Fixation
+ 	Mã hóa mật khẩu.
+ 	Cache control
+ 	X-XSS-Protection
+ 	...
+
+Hướng dẫn Spring Security 5, Code ví dụ Spring Security
+Ở loạt bài này mình sẽ làm các ví dụ Spring Security với
+
+ 	Spring MVC sử dụng XML config
+ 	Spring Boot sử dụng Annotation config.
+
+References:
+
+https://docs.spring.io/spring-security/site/docs/5.0.0.RELEASE/reference/htmlsingle/#getting-started">Spring Security</a>
+</li>
+	<li class="cat-item cat-item-207"><a href="https://stackjava.com/category/ssl" >ssl</a>
+</li>
+	<li class="cat-item cat-item-121"><a href="https://stackjava.com/category/thymeleaf" >Thymeleaf</a>
+</li>
+	<li class="cat-item cat-item-158"><a href="https://stackjava.com/category/tomcat" >Tomcat</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://stackjava.com/category/uncategorized" >Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-111"><a href="https://stackjava.com/category/web-service" >Web Service</a>
+</li>
+	<li class="cat-item cat-item-149"><a href="https://stackjava.com/category/websocket" >WebSocket</a>
+</li>
+	<li class="cat-item cat-item-116"><a href="https://stackjava.com/category/wordpress" >Wordpress</a>
+</li>
+		</ul>
+</aside><aside id="custom_html-63" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><!-- ad4 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2150386964990974"
+     data-ad-slot="5038263054"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></aside><aside id="custom_html-68" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><a href="//www.dmca.com/Protection/Status.aspx?ID=ace77a49-e8f0-4f5b-ae29-5fe0140e0dad" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_1_120.png?ID=ace77a49-e8f0-4f5b-ae29-5fe0140e0dad"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script></div></aside>
+		
+	</div><!-- #secondary -->
+
+			</div><!-- .sidebar-wrap -->
+						
+	</div><!-- .container -->
+	
+	
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	<div class="footer-widget-wrap"><div class="container"><div class="footer-widget col-xs-12 col-sm-4"><aside id="custom_html-64" class="widget_text widget footer-widget-footer widget_custom_html"><div class="textwidget custom-html-widget"><!-- text-image-2 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2150386964990974"
+     data-ad-slot="8109601414"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></aside></div><div class="footer-widget col-xs-12 col-sm-4"><aside id="custom_html-65" class="widget_text widget footer-widget-footer widget_custom_html"><div class="textwidget custom-html-widget"><!-- text-image-1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2150386964990974"
+     data-ad-slot="2118908137"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></aside></div><div class="footer-widget col-xs-12 col-sm-4"><aside id="custom_html-66" class="widget_text widget footer-widget-footer widget_custom_html"><div class="textwidget custom-html-widget"><!-- text-image-3 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2150386964990974"
+     data-ad-slot="1566569946"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></aside></div></div></div>
+	<div class="container" style="padding-top:10px; padding-bottom:10px">
+		<div style"float:left">
+			stackjava.com
+			<a href="https://www.facebook.com/stackjava/"><img class="alignnone wp-image-3093" src="https://stackjava.com/wp-content/uploads/2018/02/facebook-1.png" alt="" width="25" height="25" /></a> 
+			<a href="https://www.linkedin.com/in/cuongth/"><img class="alignnone wp-image-3094" src="https://stackjava.com/wp-content/uploads/2018/02/linkedin-1.png" alt="" width="25" height="25" /></a>
+		</div>
+	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+				<script type='text/javascript'><!--
+			var seriesdropdown = document.getElementById("orgseries_dropdown");
+			if (seriesdropdown) {
+			 function onSeriesChange() {
+					if ( seriesdropdown.options[seriesdropdown.selectedIndex].value != ( 0 || -1 ) ) {
+						location.href = "https://stackjava.com/series/"+seriesdropdown.options[seriesdropdown.selectedIndex].value;
+					}
+				}
+				seriesdropdown.onchange = onSeriesChange;
+			}
+			--></script>
+			
+
+
+    <div id="wpfront-scroll-top-container">
+        <img src="https://stackjava.com/wp-content/uploads/2018/06/stackjava.com-top-1.png" alt="" />    </div>
+    <script type="text/javascript">function wpfront_scroll_top_init() {if(typeof wpfront_scroll_top == "function" && typeof jQuery !== "undefined") {wpfront_scroll_top({"scroll_offset":100,"button_width":0,"button_height":0,"button_opacity":0.80000000000000004,"button_fade_duration":200,"scroll_duration":400,"location":1,"marginX":20,"marginY":20,"hide_iframe":false,"auto_hide":"on","auto_hide_after":2,"button_action":"top","button_action_element_selector":"","button_action_container_selector":"html, body","button_action_element_offset":0});} else {setTimeout(wpfront_scroll_top_init, 100);}}wpfront_scroll_top_init();</script><script type='text/javascript' src='https://stackjava.com/wp-content/plugins/wpfront-scroll-top/js/wpfront-scroll-top.min.js?ver=2.0.1'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/themes/zerif-lite/js/bootstrap.min.js?ver=1.8.5.44'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/themes/zerif-lite/js/jquery.knob.js?ver=1.8.5.44'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/themes/zerif-lite/js/scrollReveal.js?ver=1.8.5.44'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/themes/zerif-lite/js/zerif.js?ver=1.8.5.44'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/plugins/enlighter/resources/mootools-core-yc.js?ver=3.9.0'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-content/plugins/enlighter/resources/EnlighterJS.min.js?ver=3.9.0'></script>
+<script type='text/javascript' src='https://stackjava.com/wp-includes/js/wp-embed.min.js?ver=4.9.2'></script>
+<script type="text/javascript">/* <![CDATA[ */EnlighterJS_Config = {"selector":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"language":"java","theme":"wpcustom","indent":2,"hover":"NULL","showLinenumbers":false,"rawButton":false,"infoButton":false,"windowButton":false,"rawcodeDoubleclick":false,"grouping":true,"cryptex":{"enabled":false,"email":"mail@example.tld"}};!function(){var a=function(a){var b="Enlighter Error: ";console.error?console.error(b+a):console.log&&console.log(b+a)};return window.addEvent?"undefined"==typeof EnlighterJS?void a("Javascript Resources not loaded yet!"):"undefined"==typeof EnlighterJS_Config?void a("Configuration not loaded yet!"):void window.addEvent("domready",function(){EnlighterJS.Util.Init(EnlighterJS_Config.selector.block,EnlighterJS_Config.selector.inline,EnlighterJS_Config)}):void a("MooTools Framework not loaded yet!")}();;/* ]]> */</script>
+
+</body>
+
+</html>
