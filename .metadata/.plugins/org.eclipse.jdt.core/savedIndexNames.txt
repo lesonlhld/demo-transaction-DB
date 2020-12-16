@@ -1,5 +1,4 @@
 INDEX VERSION 1.131+D:\DB\seminar\SpringJDBCTransaction\.metadata\.plugins\org.eclipse.jdt.core
-4239719125.index
 2872044937.index
 2241061314.index
 313017593.index
