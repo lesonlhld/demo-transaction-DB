@@ -1,0 +1,119 @@
+package stackjava.com.springjdbc.dao;
+
+import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+
+import stackjava.com.springjdbc.entities.User;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDAO {
+	
+	private JdbcTemplate jdbcTemplate;
+	public class UserRowMapper implements RowMapper<User> {
+
+	    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+	    	User user = new User();
+	    	user.setId(rs.getInt("name"));
+	    	user.setName(rs.getString("NAME"));
+	    	user.setAmount(rs.getInt("amount"));
+
+	        return user;
+
+	    }
+	}
+	@Transactional
+	public void insert(List<User> listUser) {
+		String sql = "INSERT INTO user_info (id, name, amount) VALUES (?, ?, ?);";
+		for (User user: listUser) {
+			jdbcTemplate.update(sql, user.getId(), user.getName(), user.getAmount());
+			System.out.println("Inserted user: " + user.getId() +" - " +user.getName());
+		}
+	}
+	
+
+	public void insertWithoutTransaction(List<User> listUser) {
+		String sql = "INSERT INTO user_info (id, name, amount) VALUES (?, ?, ?);";
+		for (User user: listUser) {
+			jdbcTemplate.update(sql, user.getId(), user.getName(), user.getAmount());
+			System.out.println("Inserted user: " + user.getId() +" - " +user.getName());
+		}
+	}
+	
+    @SuppressWarnings("unchecked")
+	public User findByCustomerId2(int id) {
+
+        String sql = "SELECT * FROM user_info WHERE id = ?";
+        return (User) jdbcTemplate.queryForObject(
+            sql, 
+            new Object[]{id}, 
+            new BeanPropertyRowMapper<User>(User.class));
+
+    }
+    
+    public User getCurrentAmount(int id) {
+    	String sql = "SELECT * FROM user_info WHERE id = ?";
+
+    	System.out.println("Hello, im here");
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
+        
+        /*try {
+        		String sql = "SELECT amount FROM user_info WHERE id = " + id;
+
+                Object[] args = new Object[] { id };
+        		int amount = jdbcTemplate.queryForObject(sql, args, int.class);
+        		System.out.println(amount);
+        		return BigDecimal.valueOf(amount);
+        } catch (EmptyResultDataAccessException e) {
+        	return null;
+        }*/
+ 
+        /*return jdbcTemplate.query(sql, new ResultSetExtractor<BigDecimal>() {
+            public BigDecimal extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+            	System.out.println(BigDecimal.valueOf(resultSet.getInt("amount")));
+                return BigDecimal.valueOf(resultSet.getInt("amount"));
+            }
+        });*/
+    }
+
+    public void updateAmount(int id, BigDecimal amount) {
+        String sql = String.format("UPDATE user_info SET amount=%f WHERE id=%d", amount, id);
+ 
+        jdbcTemplate.execute(sql);
+    }
+/*
+    @Transactional
+    public void transfer(int sourceId, int destId, BigDecimal amount){
+    	System.out.println("Hello, im here");
+        BigDecimal sourceAmount = getCurrentAmount(sourceId);
+        BigDecimal destAmount = getCurrentAmount(destId);
+        System.out.println(sourceAmount);
+        System.out.println(destAmount);
+ 
+ 
+        // Update source account
+        BigDecimal subtract = sourceAmount.subtract(amount);
+        updateAmount(sourceId, subtract);
+ 
+        // Update dest account
+        updateAmount(destId, destAmount.add(amount));
+    }
+ */
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+}
