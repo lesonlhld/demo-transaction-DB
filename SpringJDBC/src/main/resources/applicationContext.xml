@@ -7,7 +7,7 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/demo-spring-jdbc-transaction" />
+		<property name="url" value="jdbc:mysql://localhost:3306/demo-spring-jdbc-transaction?useSSL=false" />
 		<property name="username" value="root" />
 		<property name="password" value="123456a@" />
 	</bean>
@@ -28,7 +28,7 @@
 	</bean>
 
 	<bean id="userDAO"
-		class="stackjava.com.springjdbc.dao.UserDAO">
+		class="dao.UserDAO">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
 
